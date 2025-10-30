@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GraceBot Wallpaper Maker</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .preview {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .verse-text {
+            font-size: 20px;
+            color: #333;
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .verse-ref {
+            font-size: 16px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .controls {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        input, select {
+            background: white;
+            color: #333;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        .bg-option {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .bg-option.active {
+            border-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Bible Wallpaper Maker</h1>
+            <p>Create beautiful verse wallpapers</p>
+        </div>
+        
+        <div class="preview" id="wallpaperPreview">
+            <div>
+                <div class="verse-text" id="previewVerse">The Lord is my shepherd, I lack nothing</div>
+                <div class="verse-ref" id="previewRef">- Psalm 23:1</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="input-group">
+                <label>Bible Verse:</label>
+                <input type="text" id="verseInput" placeholder="Enter your Bible verse" 
+                       value="The Lord is my shepherd, I lack nothing">
+            </div>
+            
+            <div class="input-group">
+                <label>Reference:</label>
+                <input type="text" id="refInput" placeholder="e.g., Psalm 23:1" value="Psalm 23:1">
+            </div>
+            
+            <div class="input-group">
+                <label>Background:</label>
+                <div>
+                    <div class="bg-option active" style="background: linear-gradient(135deg, #667eea, #764ba2);" 
+                         onclick="changeBackground('gradient1')"></div>
+                    <div class="bg-option" style="background: linear-gradient(135deg, #f093fb, #f5576c);" 
+                         onclick="changeBackground('gradient2')"></div>
+                    <div class="bg-option" style="background: linear-gradient(135deg, #4facfe, #00f2fe);" 
+                         onclick="changeBackground('gradient3')"></div>
+                    <div class="bg-option" style="background: linear-gradient(135deg, #43e97b, #38f9d7);" 
+                         onclick="changeBackground('gradient4')"></div>
+                </div>
+            </div>
+            
+            <button onclick="sendToTelegram()">📱 Send to Telegram</button>
+            <button onclick="getRandomVerse()">🎲 Random Verse</button>
+        </div>
+    </div>
+
+    <script>
+        // Background options
+        const backgrounds = {
+            gradient1: 'linear-gradient(135deg, #667eea, #764ba2)',
+            gradient2: 'linear-gradient(135deg, #f093fb, #f5576c)',
+            gradient3: 'linear-gradient(135deg, #4facfe, #00f2fe)',
+            gradient4: 'linear-gradient(135deg, #43e97b, #38f9d7)'
+        };
+        
+        let currentBg = 'gradient1';
+        
+        function updatePreview() {
+            const verse = document.getElementById('verseInput').value;
+            const ref = document.getElementById('refInput').value;
+            
+            document.getElementById('previewVerse').textContent = verse;
+            document.getElementById('previewRef').textContent = `- ${ref}`;
+            document.getElementById('wallpaperPreview').style.background = backgrounds[currentBg];
+        }
+        
+        function changeBackground(bgId) {
+            currentBg = bgId;
+            document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
+            event.target.classList.add('active');
+            updatePreview();
+        }
+        
+        function getRandomVerse() {
+            const verses = [
+                {text: "I can do all things through Christ who strengthens me", ref: "Philippians 4:13"},
+                {text: "For I know the plans I have for you, declares the Lord", ref: "Jeremiah 29:11"},
+                {text: "The Lord is my light and my salvation", ref: "Psalm 27:1"},
+                {text: "Be strong and courageous. Do not be afraid", ref: "Joshua 1:9"},
+                {text: "Trust in the Lord with all your heart", ref: "Proverbs 3:5"}
+            ];
+            
+            const randomVerse = verses[Math.floor(Math.random() * verses.length)];
+            document.getElementById('verseInput').value = randomVerse.text;
+            document.getElementById('refInput').value = randomVerse.ref;
+            updatePreview();
+        }
+        
+        function sendToTelegram() {
+    const verse = document.getElementById('verseInput').value;
+    const ref = document.getElementById('refInput').value;
+    const background = currentBg;
+    
+    // Send data back to Telegram bot
+    if (window.Telegram && Telegram.WebApp) {
+        Telegram.WebApp.sendData(JSON.stringify({
+            action: 'create_wallpaper',
+            verse: verse,
+            reference: ref,
+            background: background
+        }));
+    } else {
+        // Fallback for testing
+        alert("📱 Sending to Telegram...\n\nIn the real app, this would send directly to your chat!");
+        
+        // Simulate sending by showing a message
+        const message = `🖼️ *Your Wallpaper Request:*\n\n📖 **${ref}**\n*${verse}*\n\n🎨 Background: ${background}\n\nI'll send your wallpaper shortly!`;
+        
+        // This would actually be handled by Telegram Web App
+        window.location.href = `https://t.me/your_bot_username?start=wallpaper_${encodeURIComponent(verse)}_${encodeURIComponent(ref)}`;
+    }
+}        
+        // Initialize
+        document.getElementById('verseInput').addEventListener('input', updatePreview);
+        document.getElementById('refInput').addEventListener('input', updatePreview);
+        updatePreview();
+    </script>
+</body>
+</html>
