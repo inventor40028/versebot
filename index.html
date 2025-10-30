@@ -158,7 +158,7 @@
                 </div>
             </div>
             
-            <button onclick="sendToTelegram()">📱 Send to Telegram</button>
+            <button onclick="downloadWallpaper()">📱 Download Wallpaper</button>
             <button onclick="getRandomVerse()">🎲 Random Verse</button>
         </div>
     </div>
@@ -205,30 +205,21 @@
             updatePreview();
         }
         
-        function sendToTelegram() {
-    const verse = document.getElementById('verseInput').value;
-    const ref = document.getElementById('refInput').value;
-    const background = currentBg;
-    
-    // Send data back to Telegram bot
-    if (window.Telegram && Telegram.WebApp) {
-        Telegram.WebApp.sendData(JSON.stringify({
-            action: 'create_wallpaper',
-            verse: verse,
-            reference: ref,
-            background: background
-        }));
-    } else {
-        // Fallback for testing
-        alert("📱 Sending to Telegram...\n\nIn the real app, this would send directly to your chat!");
+        function downloadWallpaper() {
+            // In a real app, you'd use html2canvas to convert to image
+            alert("🖼️ Wallpaper ready! Take a screenshot of the preview above.\n\nOn iPhone: Volume Up + Power\nOn Android: Volume Down + Power");
+            
+            // For real implementation, you'd use:
+            // html2canvas(document.getElementById('wallpaperPreview')).then(canvas => {
+            //     canvas.toBlob(blob => {
+            //         const link = document.createElement('a');
+            //         link.download = 'bible-wallpaper.png';
+            //         link.href = URL.createObjectURL(blob);
+            //         link.click();
+            //     });
+            // });
+        }
         
-        // Simulate sending by showing a message
-        const message = `🖼️ *Your Wallpaper Request:*\n\n📖 **${ref}**\n*${verse}*\n\n🎨 Background: ${background}\n\nI'll send your wallpaper shortly!`;
-        
-        // This would actually be handled by Telegram Web App
-        window.location.href = `https://t.me/graceholybot?start=wallpaper_${encodeURIComponent(verse)}_${encodeURIComponent(ref)}`;
-    }
-}        
         // Initialize
         document.getElementById('verseInput').addEventListener('input', updatePreview);
         document.getElementById('refInput').addEventListener('input', updatePreview);
@@ -236,4 +227,3 @@
     </script>
 </body>
 </html>
-
